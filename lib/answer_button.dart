@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/data/quizz.dart';
 
-class AnswerButton extends StatelessWidget {
-  const AnswerButton(this.answerOptin,{super.key});
+class AnswersButton extends StatelessWidget {
+  AnswersButton(this.answerOption, this.onPressed,{super.key});
 
-  final String answerOptin;
-
+  //define callBackFunciton and send answerOption to QuestionsScreen
+  final void Function(String) onPressed;
+  final String answerOption;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () => onPressed(answerOption),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 33, 1, 95),
-        foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 9, 0, 78)),
+      child: Text(
+        answerOption,
+        style: const TextStyle(color: Colors.white),
       ),
-      child: Text(answerOptin),
     );
   }
 }

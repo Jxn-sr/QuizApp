@@ -11,7 +11,7 @@ void main() {
             colors: [Colors.purple, Colors.deepPurple],
           ),
         ),
-        child: const QuestionsScreen()
+        child: const StartScreen()
       ),
     ),
   ));

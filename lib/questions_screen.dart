@@ -1,21 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/answer_button.dart';
 import 'package:myapp/data/quizz.dart';
+import 'package:myapp/result_screen.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
 
-  @override
-  State<QuestionsScreen> createState() {
-    return _QuestionsScreen();
-  }
+  State<QuestionsScreen> createState() => _QuestionsState();
 }
 
-class _QuestionsScreen extends State<QuestionsScreen> {
-  final currentQuestion = questions[0];
+class _QuestionsState extends State<QuestionsScreen> {
+  var questionIndex = 0;
+  var score = 0;
+
+  List<String> selectedAnswer = [];
+
+  //create Function handlerAnswer for check selectedAnswer and check condition for update score
+  void handleAnswer(String selectedValue) {
+    selectedAnswer.add(selectedValue);
+    if (selectedValue == questions[questionIndex].correctAnswer) {
+      setState(
+        () {
+          score++;
+        },
+      );
+    }
+    if (questionIndex < questions.length - 1) {
+      setState(() {
+        questionIndex++;
+      });
+    } else { 
+      Navigator.push(
+        context,
+        MaterialPageRoute( // send all required value to resultScreen
+          builder: (context) => ResultScreen(
+              score: score,
+              total: questions.length,
+              questions: questions,
+              selectedAnswers: selectedAnswer),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currentQuestion = questions[questionIndex];
     return MaterialApp(
       home: Scaffold(
         body: Container(
@@ -35,10 +65,12 @@ class _QuestionsScreen extends State<QuestionsScreen> {
                     style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   ...currentQuestion.answer.map((answer) {
-                    return AnswerButton(answer);
-                  })
+                    return AnswersButton(answer, handleAnswer);
+                  }),
                 ],
               ),
             ),
